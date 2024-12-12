@@ -57,14 +57,14 @@ export function LanguageCards() {
   }
 
   const pickNextCard = () => {
-    if (!gameStarted || remainingIndices.length <= 1) {
+    if (!gameStarted || remainingIndices.length === 0) return;
+
+    const currentPosition = remainingIndices.indexOf(currentIndex);
+    if (currentPosition === remainingIndices.length - 1) {
       setGameStarted(false);
-      setCurrentIndex(null);
-      setRemainingIndices([]);
       return;
     }
 
-    const currentPosition = remainingIndices.indexOf(currentIndex);
     const nextIndex = remainingIndices[currentPosition + 1];
     setCurrentIndex(nextIndex);
     setShowTranslation(false);
