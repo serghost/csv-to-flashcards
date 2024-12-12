@@ -9,14 +9,26 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 )
 
+// if ('serviceWorker' in navigator) {
+//   window.addEventListener('load', () => {
+//     navigator.serviceWorker.register('/service-worker.js')
+//       .then(registration => {
+//         console.log('SW registered:', registration);
+//       })
+//       .catch(error => {
+//         console.log('SW registration failed:', error);
+//       });
+//   });
+// }
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(registration => {
-        console.log('SW registered:', registration);
+    navigator.serviceWorker.register('/csv-to-flashcards/service-worker.js')
+      .then((registration) => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
       })
-      .catch(error => {
-        console.log('SW registration failed:', error);
+      .catch((error) => {
+        console.error('ServiceWorker registration failed:', error);
       });
   });
 }
