@@ -1,8 +1,8 @@
 const CACHE_NAME = 'language-cards-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json'
+  '/csv-to-flashcards/',
+  '/csv-to-flashcards/index.html',
+  '/csv-to-flashcards/Manifest.json',
 ];
 
 self.addEventListener('install', (event) => {
