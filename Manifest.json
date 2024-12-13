@@ -13,13 +13,27 @@
     "src": "/csv-to-flashcards/icons/icon-192x192.png",
     "sizes": "192x192",
     "type": "image/png",
-    "purpose": "any maskable"
+    "purpose": "any"
   },
     {
     "src": "/csv-to-flashcards/icons/icon-512x512.png",
     "sizes": "512x512",
     "type": "image/png",
-    "purpose": "any maskable"
+    "purpose": "any"
+  }
+  ],
+  "screenshots": [
+    {
+    "src": "/csv-to-flashcards/screenshots/screenshot-desktop.png",
+    "sizes": "1280x720",
+    "type": "image/png",
+    "form_factor": "wide"
+  },
+    {
+    "src": "/csv-to-flashcards/screenshots/screenshot-mobile.png",
+    "sizes": "720x1280",
+    "type": "image/png",
+    "form_factor": "narrow"
   }
   ]
 }
