@@ -1,0 +1,39 @@
+{
+  "name": "CSV to Flashcards Learning App",
+  "short_name": "Flashcards",
+  "description": "Flashcards app for learning with CSV support",
+  "start_url": "/csv-to-flashcards/",
+  "scope": "/csv-to-flashcards/",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#111827",
+  "orientation": "portrait",
+  "icons": [
+    {
+    "src": "/csv-to-flashcards/icons/logo_192.svg",
+    "sizes": "192x192",
+    "type": "image/svg",
+    "purpose": "any"
+  },
+    {
+    "src": "/csv-to-flashcards/icons/logo_512.svg",
+    "sizes": "512x512",
+    "type": "image/svg",
+    "purpose": "any"
+  }
+  ],
+  "screenshots": [
+    {
+    "src": "/csv-to-flashcards/screenshots/screenshot-desktop.png",
+    "sizes": "1280x720",
+    "type": "image/png",
+    "form_factor": "wide"
+  },
+    {
+    "src": "/csv-to-flashcards/screenshots/screenshot-mobile.png",
+    "sizes": "720x1280",
+    "type": "image/png",
+    "form_factor": "narrow"
+  }
+  ]
+}
