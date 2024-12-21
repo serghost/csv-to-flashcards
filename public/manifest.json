@@ -1,7 +1,7 @@
 {
   "name": "CSV to Flashcards Learning App",
   "short_name": "Flashcards",
-  "description": "Flashcards app for learning with CSV support",
+  "description": "Transform your CSV files into interactive flashcards for efficient learning",
   "start_url": "/csv-to-flashcards/",
   "scope": "/csv-to-flashcards/",
   "display": "standalone",
