@@ -1,18 +1,33 @@
 import React, { useState } from 'react';
-import { LanguageCards } from './components/LanguageCards';
-import CollectionsPage, { Collection } from './pages/CollectionsPage';
+import { Collection, CardSet } from './types';
+import { CollectionsPage } from './pages/CollectionsPage';
+import { CollectionMenu } from './components/collection/CollectionMenu';
+import { StudySession } from './components/studySession/StudySession';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 
 function App() {
   const [currentCollection, setCurrentCollection] = useState<Collection | null>(null);
+  const [currentSet, setCurrentSet] = useState<CardSet | null>(null);
 
   const handleCollectionSelect = (collection: Collection) => {
     setCurrentCollection(collection);
   };
 
+  const handleCollectionUpdate = (updated: Collection) => {
+    setCurrentCollection(updated);
+  };
+
+  const handleSetSelect = (set: CardSet) => {
+    setCurrentSet(set);
+  };
+
   const handleBackClick = () => {
-    setCurrentCollection(null);
+    if (currentSet) {
+      setCurrentSet(null);
+    } else {
+      setCurrentCollection(null);
+    }
   };
 
   return (
@@ -30,9 +45,22 @@ function App() {
             </Button>
             <h1 className="text-2xl font-bold text-gray-100 ml-4">
               {currentCollection.name}
+              {currentSet && ` / ${currentSet.name}`}
             </h1>
           </div>
-          <LanguageCards />
+
+          {currentSet ? (
+            <StudySession
+              cardSet={currentSet}
+              onComplete={() => setCurrentSet(null)}
+            />
+          ) : (
+            <CollectionMenu
+              collection={currentCollection}
+              onUpdate={handleCollectionUpdate}
+              onSelectSet={handleSetSelect}
+            />
+          )}
         </div>
       ) : (
         <CollectionsPage onCollectionSelect={handleCollectionSelect} />

@@ -14,11 +14,6 @@ export default defineConfig({
   build: {
     sourcemap: true
   },
-  // TS config
-  server: {
-    port: 3000,
-    open: true
-  },
   root: "src",
   publicDir: "../public"
 })

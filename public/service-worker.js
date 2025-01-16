@@ -1,44 +1,55 @@
-const CACHE_NAME = 'language-cards-v1';
-const urlsToCache = [
-  '/csv-to-flashcards/',
-  '/csv-to-flashcards/index.html',
-  '/csv-to-flashcards/manifest.json',
-  '/csv-to-flashcards/icons/icon-192x192.png',
-  '/csv-to-flashcards/icons/icon-512x512.png',
-  '/csv-to-flashcards/assets/index-CuUdiMgF.css',
-  '/csv-to-flashcards/assets/index-Cvg-CsW9.js',
-  '/csv-to-flashcards/screenshots/screenshot-desktop.png',
-  '/csv-to-flashcards/screenshots/screenshot-mobile.png',
+const CACHE_NAME = 'flashcards-v1';
+const BASE_PATH = '/csv-to-flashcards';
+
+const APP_FILES = [
+  `${BASE_PATH}/`,
+  `${BASE_PATH}/index.html`,
+  `${BASE_PATH}/manifest.json`,
+  `${BASE_PATH}/assets/index.css`,
+  `${BASE_PATH}/assets/index.js`
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('Opened cache');
-      return cache.addAll(urlsToCache);
-    })
+    caches.open(CACHE_NAME)
+      .then(cache =>
+        Promise.all(
+          APP_FILES.map(url =>
+            cache.add(url).catch(error => {
+              console.error(`Failed to cache: ${url}`, error);
+              return Promise.resolve();
+            })
+          )
+        )
+      )
   );
 });
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
-  );
-});
+    caches.match(event.request)
+      .then(cached => {
+        if (cached) {
+          return cached;
+        }
 
-self.addEventListener('activate', (event) => {
-  const cacheWhitelist = [CACHE_NAME];
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (!cacheWhitelist.includes(cacheName)) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+        return fetch(event.request)
+          .then(response => {
+            if (!response || response.status !== 200) {
+              return response;
+            }
+
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
+
+            return response;
+          })
+          .catch(() => {
+            return caches.match(`${BASE_PATH}/index.html`);
+          });
+      })
   );
 });
