@@ -13,6 +13,12 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
+      - name: Check directories
+        run: |
+          echo "Root directory:"
+          ls -la
+          echo "Dist directory:"
+          ls -la dist
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
