@@ -94,7 +94,7 @@ export const CollectionMenu: React.FC<CollectionMenuProps> = ({
       <Card className="p-8 border-dashed border-2 border-gray-700">
         <label className="flex flex-col items-center cursor-pointer">
           <Upload className="w-12 h-12 text-gray-400 mb-4" />
-          <span className="text-lg text-gray-200">Загрузить CSV файл</span>
+          <span className="text-lg text-gray-700">Загрузить CSV файл</span>
           <input
             type="file"
             accept=".csv"

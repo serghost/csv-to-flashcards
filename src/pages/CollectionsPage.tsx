@@ -10,13 +10,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Collection } from '@/types';
 import { storage } from '@/storage';
-
-interface Collection {
-  id: number;
-  name: string;
-  background: string;
-}
 
 interface CollectionsPageProps {
   onCollectionSelect: (collection: Collection) => void;
@@ -32,7 +27,7 @@ const generateGradientBackground = (name: string): string => {
   )`;
 };
 
-export const CollectionsPage: React.FC = ({ onCollectionSelect }) => {
+export const CollectionsPage: React.FC<CollectionsPageProps> = ({ onCollectionSelect }) => {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [newCollectionName, setNewCollectionName] = useState('');
   const [nextId, setNextId] = useState(1);
@@ -50,7 +45,9 @@ export const CollectionsPage: React.FC = ({ onCollectionSelect }) => {
         background: generateGradientBackground(newCollectionName),
         cardSets: []
       };
-      setCollections((prev) => [newCollection, ...prev]);
+
+      storage.saveCollections([newCollection]);
+      setCollections(prev => [...prev, newCollection]);
       setNextId(nextId + 1);
       setNewCollectionName('');
       setIsDialogOpen(false);
@@ -96,20 +93,17 @@ export const CollectionsPage: React.FC = ({ onCollectionSelect }) => {
             <Card
               key={collection.id}
               style={{ background: collection.background }}
-              className="h-32 flex items-center justify-center text-gray-100 font-bold text-lg cursor-pointer hover:opacity-90 transition-opacity"
+              className="h-32 flex flex-col items-center justify-center text-gray-100 font-bold text-lg cursor-pointer hover:opacity-90 transition-opacity"
               onClick={() => onCollectionSelect(collection)}
             >
-            {collection.name}
-            <span className="text-center px-2">{collection.name}</span>
-            <span className="text-sm font-normal text-gray-400 mt-2">
-              {collection.cardSets.length || 'Нет'} наборов
-            </span>
+              <span className="text-center px-2">{collection.name}</span>
+              <span className="text-sm font-normal text-gray-400 mt-2">
+                {collection.cardSets.length || 'Нет'} наборов
+              </span>
             </Card>
           ))}
         </div>
-    </div>
+      </div>
     </div>
   );
 };
-
-export default CollectionsPage;

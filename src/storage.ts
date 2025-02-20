@@ -39,7 +39,18 @@ export const storage = {
 
   saveCollections(collections: Collection[]): void {
     try {
-      const serialized = collections.map(serializeCollection);
+      const existingCollections = this.loadCollections();
+
+      collections.forEach(newCollection => {
+        const existingIndex = existingCollections.findIndex(c => c.id === newCollection.id);
+        if (existingIndex >= 0) {
+          existingCollections[existingIndex] = newCollection;
+        } else {
+          existingCollections.push(newCollection);
+        }
+      });
+
+      const serialized = existingCollections.map(serializeCollection);
       localStorage.setItem(STORAGE_KEYS.COLLECTIONS, JSON.stringify(serialized));
     } catch (error) {
       console.error('Failed to save collections:', error);

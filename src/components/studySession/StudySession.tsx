@@ -3,7 +3,6 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CardSet } from '@/types';
 
-const TIME_THRESHOLD = 5000;
 const MIN_HARD_CARDS = 2;
 const FLIP_ANIMATION_DURATION = 600;
 
@@ -12,8 +11,17 @@ interface StudySessionProps {
   onComplete: () => void;
 }
 
+function shuffleCards(cardsToShuffle: typeof cardSet.cards) {
+  const shuffled = [...cardsToShuffle];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 export const StudySession: React.FC<StudySessionProps> = ({ cardSet, onComplete }) => {
-  const [cards, setCards] = useState(cardSet.cards);
+  const [cards, setCards] = useState(() => shuffleCards([...cardSet.cards]));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showTranslation, setShowTranslation] = useState(false);
   const [isFirstSide, setIsFirstSide] = useState(true);
@@ -25,23 +33,18 @@ export const StudySession: React.FC<StudySessionProps> = ({ cardSet, onComplete 
   const [isHardMode, setIsHardMode] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  function shuffleCards(cardsToShuffle: typeof cardSet.cards) {
-    const shuffled = [...cardsToShuffle];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  }
+  useEffect(() => {
+    console.log('hardCards updated:', hardCards);
+  }, [hardCards]);
 
   const startSession = (useHardCards: boolean = false) => {
     const currentCards = useHardCards ? hardCards : cardSet.cards;
+    console.log('Starting session with cards:', currentCards);
     setCards(shuffleCards(currentCards));
     setCurrentIndex(0);
     setShowTranslation(false);
     setStartTime(Date.now());
     setIsHardMode(useHardCards);
-
     setCurrentSessionHardCards([]);
     if (!useHardCards) {
       setHardCards([]);
@@ -49,15 +52,13 @@ export const StudySession: React.FC<StudySessionProps> = ({ cardSet, onComplete 
     setIsComplete(false);
   };
 
-  useEffect(() => {
-    console.log('hardCards updated:', hardCards);
-  }, [hardCards]);
-
   const addToHardCards = (card: (typeof cardSet.cards)[0]) => {
     console.log('Trying to add card to hard:', card);
 
     const targetArray = isHardMode ? currentSessionHardCards : hardCards;
-    const isAlreadyHard = targetArray.some(c => c.front === card.front && c.back === card.back);
+    const isAlreadyHard = targetArray.some(c =>
+      c.front === card.front && c.back === card.back
+    );
 
     console.log('Is already hard?', isAlreadyHard);
 
@@ -96,32 +97,21 @@ export const StudySession: React.FC<StudySessionProps> = ({ cardSet, onComplete 
     if (isTransitioning) return;
     setIsTransitioning(true);
 
-    const timeSpent = Date.now() - startTime;
     const currentCard = cards[currentIndex];
     const isLastCard = currentIndex === cards.length - 1;
 
     console.log('Next card:', {
-      timeSpent,
+      currentCard,
+      isLastCard,
       showTranslation,
-      isHardMode,
-      currentCard
+      isHardMode
     });
 
     if (showTranslation) {
       setShowTranslation(false);
       await new Promise(resolve => setTimeout(resolve, FLIP_ANIMATION_DURATION));
-    } else if (!isHardMode && timeSpent > TIME_THRESHOLD) {
-      console.log('Time threshold exceeded, adding to hard');
-      if (addToHardCards(currentCard)) {
-        console.log('Added to hard due to time');
-      }
     }
 
-    if (timeSpent <= TIME_THRESHOLD && !showTranslation) {
-      currentCard.progress.correct++;
-    }
-
-    currentCard.progress.lastTime = timeSpent;
     currentCard.progress.lastSeen = new Date();
 
     if (isLastCard) {
