@@ -1,0 +1,33 @@
+{
+  "name": "CSV to Flashcards Learning App",
+  "short_name": "Flashcards",
+  "description": "Transform your CSV files into interactive flashcards for efficient learning",
+  "start_url": "/csv-to-flashcards/",
+  "scope": "/csv-to-flashcards/",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#111827",
+  "orientation": "portrait",
+  "icons": [
+    {
+    "src": "/csv-to-flashcards/icons/logo.svg",
+    "sizes": "128x128 256x256 512x512",
+    "type": "image/svg+xml",
+    "purpose": "any"
+  }
+  ],
+  "screenshots": [
+    {
+    "src": "/csv-to-flashcards/screenshots/screenshot-desktop.png",
+    "sizes": "1280x720",
+    "type": "image/png",
+    "form_factor": "wide"
+  },
+    {
+    "src": "/csv-to-flashcards/screenshots/screenshot-mobile.png",
+    "sizes": "720x1280",
+    "type": "image/png",
+    "form_factor": "narrow"
+  }
+  ]
+}
